@@ -1,25 +1,42 @@
-import logo from './logo.svg';
+
 import './App.css';
 
-function App() {
+
+
+import React, { useState, useEffect } from "react";
+
+function CountdownTimer() {
+  const [timeLeft, setTimeLeft] = useState(60);
+  const [isActive, setIsActive] = useState(false); 
+
+  useEffect(() => {
+    let timer;
+   
+    if (isActive && timeLeft > 0) {
+      timer = setInterval(() => {
+        setTimeLeft((prevTime) => prevTime - 1);
+      }, 1000);
+    } else if (timeLeft === 0) {
+      setIsActive(false); 
+    }
+   
+    return () => clearInterval(timer);
+  }, [isActive, timeLeft]);
+
+  const startTimer = () => {
+    setTimeLeft(60);
+    setIsActive(true);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ textAlign: "center" }}>
+      <h1>Gerisayım sayğacı</h1>
+      <p>{timeLeft > 0 ? `${timeLeft} seconds left` : "Vaxt bitdi!"}</p>
+      <button onClick={startTimer} disabled={isActive}>
+       Azalan
+      </button>
     </div>
   );
 }
 
-export default App;
+export default CountdownTimer;
